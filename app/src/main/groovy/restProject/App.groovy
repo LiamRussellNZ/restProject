@@ -1,5 +1,9 @@
 package restProject
-import static io.restassured.RestAssured.*
+
+import io.restassured.RestAssured
+import io.restassured.http.Method
+import io.restassured.response.Response
+import io.restassured.specification.RequestSpecification
 
 class App {
     String getGreeting() {
@@ -8,8 +12,10 @@ class App {
 
     static void main(String[] args) {
         println new App().greeting
-        def res = given().when().get("https://swapi.dev/api/planets/1/")
-        println res
-        given().when().get("https://swapi.dev/api/planets/1/").then().assertThat().statusCode(200)
+        RestAssured.baseURI = "http://swapi.dev/api"
+        RequestSpecification httpRequest = RestAssured.given()
+        Response response = httpRequest.request(Method.GET, "/planets/1/")
+        String responseBody = response.getBody().asString()
+        System.out.println("Response is " + responseBody)
     }
 }
