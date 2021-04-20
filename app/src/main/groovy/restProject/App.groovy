@@ -11,11 +11,13 @@ class App {
     }
 
     static void main(String[] args) {
-        println new App().greeting
+        println new App().getGreeting()
         RestAssured.baseURI = "http://swapi.dev/api"
         RequestSpecification httpRequest = RestAssured.given()
         Response response = httpRequest.request(Method.GET, "/planets/1/")
         String responseBody = response.getBody().asString()
+        int statusCode = response.getStatusCode()
+        assert statusCode == 200
         System.out.println("Response is " + responseBody)
     }
 }
